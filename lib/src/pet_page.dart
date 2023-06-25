@@ -4,21 +4,22 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 
-Future<Pets> fetchPets() async {
+Future<List<Pets>> fetchPets() async {
   final response = await http
-      // .get(Uri.parse('https://63afb929649c73f572c113ad.mockapi.io/api/v1/cat_adoption_list'));
-      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
-  https://jsonplaceholder.typicode.com/albums/1
+      .get(Uri.parse('https://63afb929649c73f572c113ad.mockapi.io/api/v1/cat_adoption_list'));
+      // .get(Uri.parse('https://jsonplaceholder.typicode.com/albums'));
   if (response.statusCode == 200) {
-    return Pets.fromJson(jsonDecode(response.body));
+    List<dynamic> jsonData = jsonDecode(response.body);
+    List<Pets> pets = jsonData.map((data) => Pets.fromJson(data)).toList();
+    return pets;
   } else {
     throw Exception('Gagal menampilkan data!');
   }
 }
 
 class Pets {
-  final int userId;
-  final int id;
+  // final int userId;
+  // final int id;
   final String title;
   // final String name;
   // final String gender;
@@ -26,8 +27,8 @@ class Pets {
   // final String imageUrl;
 
   const Pets({
-    required this.userId,
-    required this.id,
+    // required this.userId,
+    // required this.id,
     required this.title,
     // required this.name,
     // required this.gender,
@@ -37,9 +38,9 @@ class Pets {
 
   factory Pets.fromJson(Map<String, dynamic> json) {
     return Pets(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
+      // userId: json['userId'],
+      // id: json['id'],
+      title: json['name'],
       // name: json['name'],
       // gender: json['gender'],
       // age: json['age'],
@@ -50,14 +51,14 @@ class Pets {
 }
 
 class PetListScreen extends StatefulWidget {
-  const PetListScreen ({super.key});
+  const PetListScreen({Key? key}) : super(key: key);
 
   @override
   State<PetListScreen> createState() => _PetListScreenState();
 }
 
 class _PetListScreenState extends State<PetListScreen> {
-  late Future<Pets> futurePets;
+  late Future<List<Pets>> futurePets;
 
   @override
   void initState() {
@@ -72,28 +73,47 @@ class _PetListScreenState extends State<PetListScreen> {
         title: Text('Pet List'),
       ),
       body: Center(
-        child: FutureBuilder<Pets>(
+        child: FutureBuilder<List<Pets>>(
           future: futurePets,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Card(
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      // backgroundImage: AssetImage(pet['imageUrl']),
-                    ),
-                    title: Text(snapshot.data!.title),
-                    subtitle: Text('${snapshot.data!.userId} tahun'),
+              List<Pets> pets = snapshot.data!;
+              return ListView.builder(
+                itemCount: pets.length,
+                itemBuilder: (context, index) {
+                  Pets pet = pets[index];
+                  return ListTile(
+                    title: Text(pet.title),
+                    // subtitle: Text('${pet.userId} tahun'),
                     onTap: () {
-                      String petName = snapshot.data!.title;
+                      String petTitle = pet.title;
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Kamu memilih $petName !'),
-                          duration: Duration(milliseconds: 500),
-                        ),
+                          SnackBar(
+                            content: Text('Kamu memilih album "$petTitle"'),
+                          )
                       );
                     },
-                  ),
+                  );
+                },
               );
+              // return Card(
+              //     child: ListTile(
+              //       leading: CircleAvatar(
+              //         // backgroundImage: AssetImage(pet['imageUrl']),
+              //       ),
+              //       title: Text(snapshot.data!.title),
+              //       subtitle: Text('${snapshot.data!.userId} tahun'),
+              //       onTap: () {
+              //         String petName = snapshot.data!.title;
+              //         ScaffoldMessenger.of(context).showSnackBar(
+              //           SnackBar(
+              //             content: Text('Kamu memilih $petName !'),
+              //             duration: Duration(milliseconds: 500),
+              //           ),
+              //         );
+              //       },
+              //     ),
+              // );
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
