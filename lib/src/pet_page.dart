@@ -82,17 +82,19 @@ class _PetListScreenState extends State<PetListScreen> {
                 itemCount: pets.length,
                 itemBuilder: (context, index) {
                   Pets pet = pets[index];
-                  return ListTile(
-                    title: Text(pet.title),
-                    // subtitle: Text('${pet.userId} tahun'),
-                    onTap: () {
-                      String petTitle = pet.title;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Kamu memilih album "$petTitle"'),
-                          )
-                      );
-                    },
+                  return Card(
+                      child: ListTile(
+                        title: Text(pet.title),
+                        // subtitle: Text('${pet.userId} tahun'),
+                        onTap: () {
+                          String petTitle = pet.title;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Kamu memilih album "$petTitle"'),
+                              )
+                          );
+                        },
+                    ),
                   );
                 },
               );
