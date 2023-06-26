@@ -17,31 +17,25 @@ Future<List<Pets>> fetchPets() async {
 }
 
 class Pets {
-  // final int userId;
-  // final int id;
-  // final String title;
   final String name;
   final String gender;
+  final String description;
   final int age;
   final String? imageUrl;
 
   const Pets({
-    // required this.userId,
-    // required this.id,
-    // required this.title,
     required this.name,
     required this.gender,
+    required this.description,
     required this.age,
     required this.imageUrl,
   });
 
   factory Pets.fromJson(Map<String, dynamic> json) {
     return Pets(
-      // userId: json['userId'],
-      // id: json['id'],
-      // title: json['name'],
       name: json['name'],
       gender: json['gender'],
+      description: json['description'],
       age: json['age'],
       imageUrl: json['image_url'],
 
@@ -70,6 +64,20 @@ class _PetListScreenState extends State<PetListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Pet List'),
+        /* Merubah warna background Appbar dengan gradasi, menggunakan
+        flexibleSpace dan BoxDecoration */
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[
+                Colors.grey,
+                Colors.blue,
+              ],
+            ),
+          ),
+        ),
       ),
       body: Center(
         child: FutureBuilder<List<Pets>>(
@@ -93,14 +101,19 @@ class _PetListScreenState extends State<PetListScreen> {
                             : CircleAvatar(
                           backgroundImage: AssetImage('assets/images/placeholder_image.png'),
                         ),
-                        /* Text widget untuk menampilkan nama, gender, dan umur di dalam card */
-                        title: Text(pet.name),
-                        subtitle: Text('${pet.age} tahun'),
+                        /* Text widget untuk menampilkan detail pet di dalam card */
+                        title: Text('${pet.name} - ${pet.age} tahun'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(pet.gender),
+                            Text(pet.description),
+                          ],
+                        ),
                         onTap: () {
-                          String petTitle = pet.name;
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Kamu memilih album "$petTitle"'),
+                                content: Text('Kamu memilih "${pet.name}"'),
                               )
                           );
                         },

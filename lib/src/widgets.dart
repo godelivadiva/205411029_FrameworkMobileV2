@@ -38,10 +38,14 @@ class IconAndDetail extends StatelessWidget {
     child: Row(
       children: [
         Icon(icon),
-        const SizedBox(width: 8),
+        const SizedBox(width: 7),
         Text(
           detail,
-          style: const TextStyle(fontSize: 18),
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            fontStyle: FontStyle.italic,
+          ),
         )
       ],
     ),
@@ -85,11 +89,98 @@ class StyledButton extends StatelessWidget {
   final Widget child;
   final void Function() onPressed;
 
+  // @override
+  // Widget build(BuildContext context) => OutlinedButton(
+  //   style: OutlinedButton.styleFrom(
+  //       side: const BorderSide(color: Colors.deepPurple)),
+  //   onPressed: onPressed,
+  //   child: child,
+  // );
   @override
-  Widget build(BuildContext context) => OutlinedButton(
-    style: OutlinedButton.styleFrom(
-        side: const BorderSide(color: Colors.deepPurple)),
-    onPressed: onPressed,
-    child: child,
-  );
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white, backgroundColor: Colors.indigo, // Set warna teks pada button
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+      onPressed: onPressed,
+      child: child,
+    );
+  }
+}
+
+class VaccineDetailWidget extends StatelessWidget {
+  final Map<String, dynamic> data;
+
+  const VaccineDetailWidget({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: data.entries.map((entry) {
+          Color backgroundColor;
+          Color textColor;
+          if (entry.key == 'level') {
+            backgroundColor = Colors.red.shade200;
+            textColor = Colors.white;
+          } else if (entry.key == 'age') {
+            backgroundColor = Colors.teal.shade300;
+            textColor = Colors.white;
+          } else if (entry.key == 'name') {
+            backgroundColor = Colors.lightGreen.shade600;
+            textColor = Colors.white;
+          } else {
+            backgroundColor = Colors.blueGrey;
+            textColor = Colors.white;
+          }
+          return Container(
+            margin: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              (entry.key == 'age' || entry.key == 'name')
+                  ? '${entry.key} : ${entry.value}'
+                  : '${entry.value}',
+              style: TextStyle(color: textColor),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class CustomPopup extends StatelessWidget {
+  final String title;
+  final String message;
+  final String buttonText;
+
+  const CustomPopup({
+    required this.title,
+    required this.message,
+    required this.buttonText,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      content: Text(message),
+      actions: [
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text(buttonText),
+        ),
+      ],
+    );
+  }
 }

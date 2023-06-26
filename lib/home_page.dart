@@ -39,7 +39,7 @@ class HomePage extends StatelessWidget {
         // Izin akses lokasi ditolak, minta izin
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          // Izin akses lokasi tetap ditolak, lakukan penanganan yang sesuai
+          // Izin akses lokasi tetap ditolak
           return Future.error('Izin akses lokasi ditolak');
         }
       }
@@ -55,85 +55,96 @@ class HomePage extends StatelessWidget {
         flexibleSpace dan BoxDecoration */
         flexibleSpace: Container(
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: <Color>[
-                    Colors.grey,
-                    Colors.blue
-                  ])
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[
+                Colors.grey,
+                Colors.blue,
+              ],
+            ),
           ),
         ),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/pet-background.jpg'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Stack(
-          children: <Widget>[
-            Positioned(
-              top: 16,
-              right: 16,
-              child: IconAndDetail(Icons.calendar_today, formattedDate),
-            ),
-            Positioned(
-              top: 16,
-              right: 16,
-              child: IconAndDetail(Icons.location_on_outlined, 'Current Location'),
-            ),
-            Positioned(
-              top: 72,
-              left: 16,
-              child: FutureBuilder<Position>(
-                future: getCurrentLocation(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    // Mendapatkan lokasi saat ini dari snapshot
-                    double? latitude = snapshot.data?.latitude;
-                    double? longitude = snapshot.data?.longitude;
-
-                    // Menampilkan lokasi saat ini
-                    String latitudeText = 'Latitude: $latitude';
-                    String longitudeText = 'Longitude: $longitude';
-                    IconData icon = Icons.map;
-
-                    return LocationDataWidget(
-                      locationData: LocationData(icon, latitudeText, longitudeText),
-                    );
-                  } else if (snapshot.hasError) {
-                    // Menampilkan pesan kesalahan jika terjadi masalah dalam mendapatkan lokasi
-                    return IconAndDetail(Icons.location_city, 'Error: ${snapshot.error}');
-                  } else {
-                    // Menampilkan indikator loading saat mendapatkan lokasi
-                    return CircularProgressIndicator();
-                  }
-                },
+      body: Stack(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/pet-background.jpeg'),
+                fit: BoxFit.cover,
               ),
             ),
-            Positioned(
-              top: 128,
-              left: 16,
-              right: 16,
+          ),
+          Positioned(
+            top: 16,
+            right: 16,
+            child: IconAndDetail(Icons.calendar_today, formattedDate),
+          ),
+          Positioned(
+            top: 16,
+            left: 16,
+            child: IconAndDetail(Icons.location_on_outlined, 'Current Location'),
+          ),
+          Positioned(
+            top: 40,
+            left: 16,
+            child: FutureBuilder<Position>(
+              future: getCurrentLocation(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  // Mendapatkan lokasi saat ini dari snapshot
+                  double? latitude = snapshot.data?.latitude;
+                  double? longitude = snapshot.data?.longitude;
+
+                  // Menampilkan lokasi saat ini
+                  String latitudeText = 'Latitude: $latitude';
+                  String longitudeText = 'Longitude: $longitude';
+                  IconData icon = Icons.map;
+
+                  return LocationDataWidget(
+                    locationData: LocationData(icon, latitudeText, longitudeText),
+                  );
+                } else if (snapshot.hasError) {
+                  // Menampilkan pesan kesalahan jika terjadi masalah dalam mendapatkan lokasi
+                  return IconAndDetail(Icons.location_city, 'Error: ${snapshot.error}');
+                } else {
+                  // Menampilkan indikator loading saat mendapatkan lokasi
+                  return CircularProgressIndicator();
+                }
+              },
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height / 2 - 20 / 2, // Menempatkan widget di tengah vertikal
+            left: 0,
+            right: 0,
+            child: Container(
+              alignment: Alignment.center,
               child: Header("Welcome to Pet Care"),
             ),
-            Positioned(
-              bottom: 16,
-              left: 16,
-              right: 16,
-              child: Column(
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
                     child: Text('Menu'),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white, backgroundColor: Colors.blue, // Set warna teks pada button
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => MenuScreen()),
+                        MaterialPageRoute(builder: (context) => MenuScreen()),
                       );
-                    }
+                    },
                   ),
                   Consumer<ApplicationState>(
                     builder: (context, appState, _) => AuthenticationPage(
@@ -146,8 +157,8 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
