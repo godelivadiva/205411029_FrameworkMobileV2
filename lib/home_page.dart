@@ -1,3 +1,4 @@
+import 'package:coba/src/menu_page.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     hide EmailAuthProvider, PhoneAuthProvider;
 import 'package:flutter/material.dart';
@@ -7,7 +8,7 @@ import 'package:geolocator/geolocator.dart';
 
 import 'app_state.dart';
 import 'src/authentication.dart';
-import 'src/pet_page.dart';
+import 'src/menu_page.dart';
 import 'src/widgets.dart';
 
 class HomePage extends StatelessWidget {
@@ -130,7 +131,7 @@ class HomePage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PetListScreen()),
+                            builder: (context) => MenuScreen()),
                       );
                     }
                   ),
