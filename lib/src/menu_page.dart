@@ -19,9 +19,10 @@ class MenuScreen extends StatelessWidget {
             child: Container(
               width: orientation == Orientation.portrait ? 300 : 500,
               height: orientation == Orientation.portrait ? 400 : 200,
+              // Untuk scrollable list
               child: ListView(
                 children: [
-                  ListTile(
+                  ListTile( // deklarasi item
                     leading: const Icon(Icons.pets),
                     title: const Text('Pets'),
                     onTap: () {

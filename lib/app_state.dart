@@ -14,6 +14,7 @@ class ApplicationState extends ChangeNotifier {
   bool _loggedIn = false;
   bool get loggedIn => _loggedIn;
 
+  // mendapatkan data dari aplikasi dan di sinkronkan dengan firebase
   Future<void> init() async {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
@@ -22,7 +23,9 @@ class ApplicationState extends ChangeNotifier {
       EmailAuthProvider(),
     ]);
 
-    FirebaseAuth.instance.userChanges().listen((user) {
+    // Disini akan mengubah state untuk login dan logout, dimana akan berhubungan juga
+    // dengan text yang ditampilkan pada button
+    FirebaseAuth.instance.userChanges().listen((user) { // terhubung langsung ke firebase
       if (user != null) {
         _loggedIn = true;
       } else {

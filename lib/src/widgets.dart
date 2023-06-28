@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Widget untuk styling pada header
 class Header extends StatelessWidget {
   const Header(this.heading, {super.key});
   final String heading;
@@ -89,13 +90,6 @@ class StyledButton extends StatelessWidget {
   final Widget child;
   final void Function() onPressed;
 
-  // @override
-  // Widget build(BuildContext context) => OutlinedButton(
-  //   style: OutlinedButton.styleFrom(
-  //       side: const BorderSide(color: Colors.deepPurple)),
-  //   onPressed: onPressed,
-  //   child: child,
-  // );
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -111,6 +105,7 @@ class StyledButton extends StatelessWidget {
   }
 }
 
+// Widget untuk tampilan vaccine agar lebih bewarna
 class VaccineDetailWidget extends StatelessWidget {
   final Map<String, dynamic> data;
 
@@ -157,6 +152,7 @@ class VaccineDetailWidget extends StatelessWidget {
   }
 }
 
+// Widget untuk menampilkan pop-up warning/notification, dimana judul dan messagenya sesuai yang diinputkan
 class CustomPopup extends StatelessWidget {
   final String title;
   final String message;

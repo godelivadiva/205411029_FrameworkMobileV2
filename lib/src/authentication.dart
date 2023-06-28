@@ -10,6 +10,7 @@ class AuthenticationPage extends StatelessWidget {
     required this.signOut,
   });
 
+  // sebagai penanda untuk menampilkan fungsi login atau logout
   final bool loggedIn;
   final void Function() signOut;
 
@@ -21,8 +22,10 @@ class AuthenticationPage extends StatelessWidget {
           padding: const EdgeInsets.only(left: 24, bottom: 8),
           child: StyledButton(
               onPressed: () {
+                // sesuai dengan boolean, Action dari button akan berubah
                 !loggedIn ? context.push('/sign-in') : signOut();
               },
+              // sesuai dengan boolean, Text dari button akan berubah
               child: !loggedIn ? const Text('Login') : const Text('Logout')),
         ),
       ],

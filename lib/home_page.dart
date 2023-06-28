@@ -16,20 +16,21 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Mendapatkan tanggal sekarang
+    // Mendapatkan tanggal sekarang menggunakan package intl (bawaan flutter)
     DateTime now = DateTime.now();
     // Format tanggal menjadi 'Bulan tanggal, tahun'
     String formattedDate = DateFormat('MMMM d, yyyy').format(now);
 
-    // Mendapatkan lokasi saat ini
+    // Mendapatkan lokasi saat ini dengan geolocator (sesuai GPS)
+    // jangan lupa untuk menambahkan akses permission location pada android dan ios
     Future<Position> getCurrentLocation() async {
       bool serviceEnabled;
       LocationPermission permission;
 
-      // Memeriksa apakah layanan lokasi diaktifkan
+      // Memeriksa apakah layanan lokasi diaktifkan (GPS)
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        // Layanan lokasi tidak aktif, lakukan penanganan yang sesuai
+        // Layanan GPS tidak aktif, tampilkan error
         return Future.error('Layanan lokasi tidak aktif');
       }
 
@@ -39,12 +40,12 @@ class HomePage extends StatelessWidget {
         // Izin akses lokasi ditolak, minta izin
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          // Izin akses lokasi tetap ditolak
+          // Izin akses lokasi tetap ditolak, tampilkan error
           return Future.error('Izin akses lokasi ditolak');
         }
       }
 
-      // Mendapatkan posisi saat ini
+      // Mendapatkan posisi saat ini (GPS)
       return await Geolocator.getCurrentPosition();
     }
 

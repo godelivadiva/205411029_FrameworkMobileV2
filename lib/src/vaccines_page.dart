@@ -5,6 +5,7 @@ import 'widgets.dart';
 
 import 'package:http/http.dart' as http;
 
+// mendapatkan list dari vaksin-vaksin yang di-parse dari API
 Future<List<Vaccines>> fetchVaccines() async {
   final response = await http
       .get(Uri.parse('https://63afb929649c73f572c113ad.mockapi.io/api/v1/cat_vaccine'));
@@ -13,10 +14,12 @@ Future<List<Vaccines>> fetchVaccines() async {
     List<Vaccines> vaccines = jsonData.map((data) => Vaccines.fromJson(data)).toList();
     return vaccines;
   } else {
+    // error ketika API gagal di muat
     throw Exception('Gagal menampilkan data!');
   }
 }
 
+// class definition untuk variabel yang akan ditampilkan pada widget
 class Vaccines {
   final String level;
   final String name;
@@ -88,6 +91,7 @@ class _VaccinesScreen extends State<VaccinesScreen> {
                   Vaccines vaccine = vaccines[index];
                   return Card(
                     child: ListTile(
+                      //
                       title: VaccineDetailWidget(data: {
                         'level': vaccine.level,
                         'age': vaccine.age,

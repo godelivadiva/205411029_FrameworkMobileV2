@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 
+// mendapatkan list dari pet yang di-parse dari API
 Future<List<Pets>> fetchPets() async {
   final response = await http
       .get(Uri.parse('https://63afb929649c73f572c113ad.mockapi.io/api/v1/cat_adoption_list'));
@@ -12,10 +13,12 @@ Future<List<Pets>> fetchPets() async {
     List<Pets> pets = jsonData.map((data) => Pets.fromJson(data)).toList();
     return pets;
   } else {
+    // error ketika API gagal dimuat
     throw Exception('Gagal menampilkan data!');
   }
 }
 
+// class definition untuk Pets
 class Pets {
   final String name;
   final String gender;
